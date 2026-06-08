@@ -13,7 +13,7 @@
 <title>めい家計簿</title>
 <style>
 :root{
-  --bg:#eef6e9;--paper:#fffdf6;--card:#ffffff;--deep:#1f5b3d;--main:#2fa66a;--soft:#d9efd9;
+  --bg:#eef6e9;--paper:#f2fbef;--card:#ffffff;--deep:#1f5b3d;--main:#2fa66a;--soft:#d9efd9;
   --line:#dce8d9;--muted:#6c7c6f;--danger:#b32525;--warn:#e7a321;--ink:#24352a;
   --shadow:0 10px 28px rgba(31,91,61,.12);--r:22px;
 }
@@ -24,12 +24,12 @@ button,input,select,textarea{font:inherit}
 button{border:0;cursor:pointer}
 .app{max-width:480px;margin:0 auto;min-height:100dvh;background:linear-gradient(180deg,#f8fbf4 0%,#eef6e9 45%,#e7f1e3 100%);position:relative;overflow:hidden;padding-bottom:92px}
 .top{background:var(--main);color:white;padding:18px 18px 16px;border-bottom-left-radius:26px;border-bottom-right-radius:26px;box-shadow:0 8px 18px rgba(47,166,106,.22)}
-.topRow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.topRow{display:flex;align-items:center;justify-content:flex-start;gap:12px}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{width:42px;height:42px;border-radius:16px;background:#fff;display:grid;place-items:center;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4)}
 .logo:before{content:"";width:22px;height:26px;border-radius:8px;background:linear-gradient(180deg,#71c987,#2b925f);box-shadow:0 0 0 5px #eaf7ec inset}
 .title{font-weight:800;font-size:20px;letter-spacing:.02em}.sub{font-size:12px;opacity:.9;margin-top:2px}
-.monthNav{display:flex;align-items:center;gap:8px;margin-top:14px}.monthNav button{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:8px 12px}.monthTitle{flex:1;text-align:center;font-weight:750}
+.monthNav{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px}.monthNav button{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.45);border-radius:999px;padding:8px 12px}.monthNav.clean{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:8px 12px;width:max-content;min-width:180px;margin-left:auto;margin-right:auto}.monthTitle{flex:1;text-align:center;font-weight:750}
 main{padding:14px}
 .page{display:none;animation:fade .18s ease}.page.active{display:block}@keyframes fade{from{opacity:.45;transform:translateY(4px)}to{opacity:1;transform:none}}
 .card{background:rgba(255,255,255,.9);border:1px solid rgba(220,232,217,.9);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
@@ -39,7 +39,7 @@ main{padding:14px}
 .kpi{background:#f5faf0;border:1px solid var(--line);border-radius:18px;padding:12px}.kpi b{display:block;font-size:20px;color:var(--deep);margin-top:4px}.kpi small{color:var(--muted)}
 .amount.plus{color:#198857}.amount.minus{color:#b13a30}
 .progress{height:14px;background:#e4eee0;border-radius:999px;overflow:hidden}.bar{height:100%;width:0%;background:linear-gradient(90deg,#9dd194,#2fa66a);border-radius:999px;transition:.2s}.bar.danger{background:linear-gradient(90deg,#ef9b77,#b32525)}
-.alert{padding:12px;border-radius:16px;background:#fff7db;border:1px solid #f2d080;color:#7b5200;line-height:1.55}.alert.danger{background:#fff0ed;border-color:#e6a096;color:#8b1d1d;font-weight:750}
+.alert{padding:12px;border-radius:16px;background:#eef9ec;border:1px solid #a8d9ad;color:#235b3d;line-height:1.55}.alert.danger{background:#fff0ed;border-color:#e6a096;color:#8b1d1d;font-weight:750}
 .field{margin-bottom:12px}.label{font-size:13px;font-weight:700;color:var(--deep);margin-bottom:6px;display:block}
 .input,select,textarea{width:100%;border:1px solid var(--line);border-radius:15px;background:white;padding:12px;color:var(--ink);outline:none}
 textarea{min-height:70px;resize:vertical}.input:focus,select:focus,textarea:focus{border-color:#78bd7a;box-shadow:0 0 0 4px rgba(47,166,106,.12)}
@@ -60,9 +60,8 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
   <header class="top">
     <div class="topRow">
       <div class="brand"><div class="logo"></div><div><div class="title">めい家計簿</div><div class="sub">貯金を守る、毎日の小さな作戦ノート</div></div></div>
-      <button class="secondary" id="quickAddBtn">入力</button>
     </div>
-    <div class="monthNav"><button id="prevMonth">&lt;</button><div class="monthTitle" id="monthTitle"></div><button id="nextMonth">&gt;</button></div>
+    <div class="monthNav clean"><div class="monthTitle" id="monthTitle"></div></div>
   </header>
 
   <main>
@@ -82,10 +81,10 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
         <div id="foodMsg" class="alert"></div>
       </div>
       <div class="card">
-        <div class="h"><h2>貯金目標ナビ</h2><span class="mini">給料日前まで自動計算</span></div>
+        <div class="h"><h2>貯金目標ナビ</h2><button class="secondary" data-page="settings">目標を設定</button></div>
         <div class="grid2">
-          <div class="kpi"><small>今月目標</small><b id="saveGoal">NT$0</b></div>
-          <div class="kpi"><small>目標まで</small><b id="saveNeed">NT$0</b></div>
+          <div class="kpi"><small>今月目標</small><b id="saveGoal">未設定</b></div>
+          <div class="kpi"><small>目標まで</small><b id="saveNeed">未設定</b></div>
         </div>
         <div style="height:10px"></div>
         <div id="budgetAdvice" class="alert"></div>
@@ -192,8 +191,8 @@ const baseExpense=["推し活","食費","外食","カフェ","交通","生活費
 const baseIncome=["給料","ボーナス","バイト","業績賞与","臨時収入","返金","その他"];
 let state=load();
 let viewMonth=today().slice(0,7), selectedDate=today(), addType="expense", selectedCat=baseExpense[0], listFilter="all";
-function defaultState(){return{settings:{foodLimit:150,monthlyGoal:15000,payday:5,foodBudget:4500,lifeBudget:6000},records:[],expenseCategories:baseExpense,incomeCategories:baseIncome};}
-function load(){try{const raw=localStorage.getItem(KEY);if(!raw)return defaultState();const data=JSON.parse(raw);return Object.assign(defaultState(),data,{settings:Object.assign(defaultState().settings,data.settings||{})});}catch(e){return defaultState();}}
+function defaultState(){return{settings:{foodLimit:150,monthlyGoal:0,payday:5,foodBudget:4500,lifeBudget:6000,goalUserSet:false},records:[],expenseCategories:baseExpense,incomeCategories:baseIncome};}
+function load(){try{const raw=localStorage.getItem(KEY);if(!raw)return defaultState();const data=JSON.parse(raw);const merged=Object.assign(defaultState(),data,{settings:Object.assign(defaultState().settings,data.settings||{})});if(!merged.settings.goalUserSet&&Number(merged.settings.monthlyGoal)===15000)merged.settings.monthlyGoal=0;return merged;}catch(e){return defaultState();}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){toast("保存できませんでした。空き容量を確認してください。");}}
 function $(id){return document.getElementById(id);}
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600);}
@@ -215,14 +214,21 @@ function renderFood(){
  const msg=$("foodMsg"); if(used>limit){msg.className="alert danger";msg.textContent="重大警告：今日の食費は上限を"+money(used-limit)+"超過しています。明日は必ず調整。追加の間食・カフェ・夜食は禁止レベルです。"}else{msg.className="alert";msg.textContent="まだ"+money(limit-used)+"使えます。ここで止められたら、貯金体質にかなり近づきます。";}
 }
 function renderGoal(inc,exp,net){
- const goal=Number(state.settings.monthlyGoal)||0, need=Math.max(0,goal-net);
- $("saveGoal").textContent=money(goal); $("saveNeed").textContent=money(need);
- const days=daysUntilPayday(); const remainAfterGoal=inc-exp-goal;
+ const goal=Number(state.settings.monthlyGoal)||0;
+ const hasGoal=goal>0;
+ const need=Math.max(0,goal-net);
+ $("saveGoal").textContent=hasGoal?money(goal):"未設定";
+ $("saveNeed").textContent=hasGoal?money(need):"未設定";
+ const days=daysUntilPayday();
  let foodLeft=Math.max(0,(Number(state.settings.foodBudget)||0)-monthCatFood());
  let lifeLeft=Math.max(0,(Number(state.settings.lifeBudget)||0)-monthLife());
  let perFood=Math.floor(foodLeft/Math.max(1,days)), perLife=Math.floor(lifeLeft/Math.max(1,days));
- let msg="給料日前まであと"+days+"日。目標貯金を守るなら、食費は1日あたり約"+money(perFood)+"、生活費は1日あたり約"+money(perLife)+"が目安です。";
- if(remainAfterGoal<0) msg+=" 今月は目標に対して"+money(Math.abs(remainAfterGoal))+"不足。ここからは固定費以外を強めに止血しましょう。";
+ let msg="給料日前まであと"+days+"日。今は貯金目標が未設定です。設定するまでは、食費は1日あたり約"+money(perFood)+"、生活費は1日あたり約"+money(perLife)+"を目安にしましょう。";
+ if(hasGoal){
+   const remainAfterGoal=inc-exp-goal;
+   msg="給料日前まであと"+days+"日。目標貯金を守るなら、食費は1日あたり約"+money(perFood)+"、生活費は1日あたり約"+money(perLife)+"が目安です。";
+   if(remainAfterGoal<0) msg+=" 今月は目標に対して"+money(Math.abs(remainAfterGoal))+"不足。ここからは固定費以外を強めに止血しましょう。";
+ }
  $("budgetAdvice").textContent=msg;
 }
 function daysUntilPayday(){const d=new Date();let y=d.getFullYear(), m=d.getMonth(), day=Number(state.settings.payday)||5;let pay=new Date(y,m,Math.min(day,28)); if(d>pay)pay=new Date(y,m+1,Math.min(day,28)); return Math.max(1,Math.ceil((pay-d)/(86400000)));}
@@ -238,13 +244,13 @@ function renderDayList(){const arr=state.records.filter(r=>r.date===selectedDate
 function renderAllList(){let arr=[...state.records];if(listFilter!=="all")arr=arr.filter(r=>r.type===listFilter);arr.sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));$("allList").innerHTML=arr.length?arr.map(recordHTML).join(""):'<div class="empty">記録がありません。</div>'}
 function renderAnalysis(){ratio("expenseRatios","expense",state.expenseCategories); ratio("incomeRatios","income",state.incomeCategories); const m=monthRecords(), exp=sum(m,"expense"), inc=sum(m,"income"), food=monthCatFood(); let memo="今月は収入"+money(inc)+"、支出"+money(exp)+"。"; if(exp>inc)memo+=" 収入より支出が多いので、まず食費・カフェ・推し活以外の不明支出を止めるのが最優先です。"; else memo+=" 黒字です。このまま貯金目標を先取りで確保すると強いです。"; if(food>Number(state.settings.foodBudget||0))memo+=" 食費予算を超えています。明日からは1日上限をさらに厳しめに見てください。"; $("proMemo").textContent=memo;}
 function ratio(id,type,cats){const m=monthRecords().filter(r=>r.type===type), total=sum(m);let html="";cats.forEach(c=>{const v=sum(m.filter(r=>r.category===c));if(v>0){const p=total?Math.round(v/total*100):0;html+='<div class="ratio"><div class="ratioTop"><span><span class="dot" style="background:'+catColor(c)+'"></span> '+esc(c)+'</span><b>'+money(v)+' / '+p+'%</b></div><div class="thin"><i style="width:'+p+'%;background:'+catColor(c)+'"></i></div></div>'}});$(id).innerHTML=html||'<div class="empty">今月のデータはまだありません。</div>'}
-function renderSettings(){ $("setFood").value=state.settings.foodLimit; $("setGoal").value=state.settings.monthlyGoal; $("setPayday").value=state.settings.payday; $("setFoodBudget").value=state.settings.foodBudget; $("setLifeBudget").value=state.settings.lifeBudget;}
+function renderSettings(){ $("setFood").value=state.settings.foodLimit; $("setGoal").value=Number(state.settings.monthlyGoal)>0?state.settings.monthlyGoal:""; $("setPayday").value=state.settings.payday; $("setFoodBudget").value=state.settings.foodBudget; $("setLifeBudget").value=state.settings.lifeBudget;}
 function setPage(p){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(p).classList.add("active");document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.page===p));render();}
 function addRecord(){const amount=Number($("amount").value);if(!amount||amount<=0){toast("金額を入力してください。");return;}state.records.push({id:uid(),type:addType,amount,category:selectedCat,date:$("date").value||today(),note:$("note").value.trim(),account:$("account").value.trim(),currency:"TWD"});save();$("amount").value="";$("note").value="";const msgs=["今日も記録できてえらい。お金の流れ、ちゃんと見えてきてるで。","小さな記録が貯金を守る。ここから強くなれる。","使った事実を見られる人は、貯められる人です。","この一筆が未来の余裕につながります。ぼちぼちいこな。"];toast(msgs[Math.floor(Math.random()*msgs.length)]);render();}
 function del(id){state.records=state.records.filter(r=>r.id!==id);save();render();toast("削除しました。");}
 function parseCSV(text){let rows=[],row=[],v="",q=false;for(let i=0;i<text.length;i++){let c=text[i],n=text[i+1];if(q){if(c=='"'&&n=='"'){v+='"';i++;}else if(c=='"'){q=false;}else v+=c;}else{if(c=='"')q=true;else if(c==","){row.push(v);v="";}else if(c=="\n"){row.push(v);rows.push(row);row=[];v="";}else if(c!="\r")v+=c;}}if(v||row.length){row.push(v);rows.push(row);}return rows;}
 function importCSVFile(file){const reader=new FileReader();reader.onload=()=>{const rows=parseCSV(String(reader.result).replace(/^\uFEFF/,""));const head=rows.shift();const idx=n=>head.indexOf(n);let count=0;rows.forEach(r=>{const rawDate=r[idx("日付")]||"";const ds=rawDate.length===8?rawDate.slice(0,4)+"-"+rawDate.slice(4,6)+"-"+rawDate.slice(6,8):rawDate;const amount=Number(r[idx("金額")]||0);if(!ds||!amount)return;const kubun=r[idx("収支区分")]||"支";const type=kubun.includes("収")?"income":"expense";let cat=r[idx("カテゴリ")]||r[idx("大分類")]||"その他";if(type==="income"&&!state.incomeCategories.includes(cat))state.incomeCategories.push(cat);if(type==="expense"&&!state.expenseCategories.includes(cat))state.expenseCategories.push(cat);state.records.push({id:r[idx("UUID")]||uid(),type,amount,category:cat,date:ds,note:r[idx("メモ")]||"",account:r[idx("アカウント")]||"",currency:r[idx("通貨")]||"TWD"});count++;});save();toast(count+"件インポートしました。");render();};reader.readAsText(file,"utf-8");}
-document.addEventListener("click",e=>{const t=e.target.closest("button,.day,.catBtn");if(!t)return;if(t.dataset.page)setPage(t.dataset.page);if(t.dataset.jump)setPage(t.dataset.jump);if(t.id==="quickAddBtn")setPage("add");if(t.id==="prevMonth"){let d=new Date(viewMonth+"-01");d.setMonth(d.getMonth()-1);viewMonth=d.toISOString().slice(0,7);render();}if(t.id==="nextMonth"){let d=new Date(viewMonth+"-01");d.setMonth(d.getMonth()+1);viewMonth=d.toISOString().slice(0,7);render();}if(t.id==="typeExpense"){addType="expense";t.classList.add("active");$("typeIncome").classList.remove("active");renderCats();}if(t.id==="typeIncome"){addType="income";t.classList.add("active");$("typeExpense").classList.remove("active");renderCats();}if(t.dataset.cat){selectedCat=t.dataset.cat;renderCats();}if(t.id==="addBtn")addRecord();if(t.dataset.del)del(t.dataset.del);if(t.dataset.day){selectedDate=t.dataset.day;renderDayList();}if(t.id==="filterAll"){listFilter="all";renderAllList();}if(t.id==="filterExpense"){listFilter="expense";renderAllList();}if(t.id==="filterIncome"){listFilter="income";renderAllList();}if(t.id==="saveSettings"){state.settings.foodLimit=Number($("setFood").value)||150;state.settings.monthlyGoal=Number($("setGoal").value)||15000;state.settings.payday=Number($("setPayday").value)||5;state.settings.foodBudget=Number($("setFoodBudget").value)||4500;state.settings.lifeBudget=Number($("setLifeBudget").value)||6000;save();toast("設定を保存しました。");render();}if(t.id==="exportJson"){download("mei-kakeibo-backup.json",JSON.stringify(state,null,2));}if(t.id==="exportCsv"){const rows=[["日付","収支区分","カテゴリ","金額","通貨","アカウント","メモ","UUID"],...state.records.map(r=>[r.date,r.type==="income"?"収":"支",r.category,r.amount,r.currency||"TWD",r.account||"",r.note||"",r.id])];download("mei-kakeibo.csv",rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"));}if(t.id==="clearAll"){if(confirm("全データを削除しますか？")){state=defaultState();save();render();}}});
+document.addEventListener("click",e=>{const t=e.target.closest("button,.day,.catBtn");if(!t)return;if(t.dataset.page)setPage(t.dataset.page);if(t.dataset.jump)setPage(t.dataset.jump);if(t.id==="prevMonth"){let d=new Date(viewMonth+"-01");d.setMonth(d.getMonth()-1);viewMonth=d.toISOString().slice(0,7);render();}if(t.id==="nextMonth"){let d=new Date(viewMonth+"-01");d.setMonth(d.getMonth()+1);viewMonth=d.toISOString().slice(0,7);render();}if(t.id==="typeExpense"){addType="expense";t.classList.add("active");$("typeIncome").classList.remove("active");renderCats();}if(t.id==="typeIncome"){addType="income";t.classList.add("active");$("typeExpense").classList.remove("active");renderCats();}if(t.dataset.cat){selectedCat=t.dataset.cat;renderCats();}if(t.id==="addBtn")addRecord();if(t.dataset.del)del(t.dataset.del);if(t.dataset.day){selectedDate=t.dataset.day;renderDayList();}if(t.id==="filterAll"){listFilter="all";renderAllList();}if(t.id==="filterExpense"){listFilter="expense";renderAllList();}if(t.id==="filterIncome"){listFilter="income";renderAllList();}if(t.id==="saveSettings"){state.settings.foodLimit=Number($("setFood").value)||150;state.settings.monthlyGoal=Number($("setGoal").value)||0;state.settings.goalUserSet=Number($("setGoal").value)>0;state.settings.payday=Number($("setPayday").value)||5;state.settings.foodBudget=Number($("setFoodBudget").value)||4500;state.settings.lifeBudget=Number($("setLifeBudget").value)||6000;save();toast("設定を保存しました。");setPage("home");render();}if(t.id==="exportJson"){download("mei-kakeibo-backup.json",JSON.stringify(state,null,2));}if(t.id==="exportCsv"){const rows=[["日付","収支区分","カテゴリ","金額","通貨","アカウント","メモ","UUID"],...state.records.map(r=>[r.date,r.type==="income"?"収":"支",r.category,r.amount,r.currency||"TWD",r.account||"",r.note||"",r.id])];download("mei-kakeibo.csv",rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n"));}if(t.id==="clearAll"){if(confirm("全データを削除しますか？")){state=defaultState();save();render();}}});
 function download(name,content){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type:"text/plain;charset=utf-8"}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
 $("date").value=today(); $("importCsv").addEventListener("change",e=>{if(e.target.files[0])importCSVFile(e.target.files[0]);});$("importJson").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);save();render();toast("復元しました。")}catch(err){toast("JSONを読み込めませんでした。")}};r.readAsText(f);});
 render();
